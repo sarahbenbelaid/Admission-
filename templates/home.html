@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction - Choisissez votre modèle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Choisissez votre Prédiction</h1>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="choix">Sélectionner le modèle de prédiction :</label>
+                <select id="choix" name="choix" required>
+                    <option value="">-- Choisir --</option>
+                    <option value="moyenne">Moyenne Universitaire</option>
+                    <option value="embauche">Embauche</option>
+                    <option value="salaire">Salaire</option>
+                </select>
+            </div>
+
+            <div id="moyenne-form" style="display: none;">
+                <h2>Formulaire Prédiction Moyenne Universitaire</h2>
+                <div class="form-group">
+                    <label for="score_final">Score Final :</label>
+                    <input type="number" id="score_final" name="score_final">
+                </div>
+                <div class="form-group">
+                    <label for="moy_bac_et">Moyenne Bac :</label>
+                    <input type="number" id="moy_bac_et" name="moy_bac_et" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="Mention">Mention :</label>
+                    <input type="text" id="Mention" name="Mention">
+                </div>
+                <div class="form-group">
+                    <label for="nature_bac">Nature Bac :</label>
+                    <input type="text" id="nature_bac" name="nature_bac">
+                </div>
+            </div>
+
+            <div id="embauche-form" style="display: none;">
+                <h2>Formulaire Prédiction Embauche</h2>
+                <div class="form-group">
+                    <label for="days_since_diplome">Jours Depuis Diplôme :</label>
+                    <input type="number" id="days_since_diplome" name="days_since_diplome">
+                </div>
+                <div class="form-group">
+                    <label for="diplome">Diplôme :</label>
+                    <input type="text" id="diplome" name="diplome">
+                </div>
+                <div class="form-group">
+                    <label for="offre">Offre :</label>
+                    <input type="text" id="offre" name="offre">
+                </div>
+                <div class="form-group">
+                    <label for="entreprise_location">Lieu Entreprise :</label>
+                    <input type="text" id="entreprise_location" name="entreprise_location">
+                </div>
+                <div class="form-group">
+                    <label for="universite">Université :</label>
+                    <input type="text" id="universite" name="universite">
+                </div>
+            </div>
+
+            <div id="salaire-form" style="display: none;">
+                <h2>Formulaire Estimation Salaire</h2>
+                <div class="form-group">
+                    <label for="universite_salaire">Université :</label>
+                    <input type="text" id="universite_salaire" name="universite_salaire">
+                </div>
+                <div class="form-group">
+                    <label for="diplome_part1">Diplôme Partie 1 :</label>
+                    <input type="text" id="diplome_part1" name="diplome_part1">
+                </div>
+                <div class="form-group">
+                    <label for="diplome_part2">Diplôme Partie 2 :</label>
+                    <input type="text" id="diplome_part2" name="diplome_part2">
+                </div>
+                <div class="form-group">
+                    <label for="diplome_part3">Diplôme Partie 3 :</label>
+                    <input type="text" id="diplome_part3" name="diplome_part3">
+                </div>
+                <div class="form-group">
+                    <label for="offre_salaire">Offre :</label>
+                    <input type="text" id="offre_salaire" name="offre_salaire">
+                </div>
+                <div class="form-group">
+                    <label for="entreprise_location_salaire">Lieu Entreprise :</label>
+                    <input type="text" id="entreprise_location_salaire" name="entreprise_location_salaire">
+                </div>
+                <div class="form-group">
+                    <label for="dateDiplome">Date Diplôme :</label>
+                    <input type="date" id="dateDiplome" name="dateDiplome">
+                </div>
+                <div class="form-group">
+                    <label for="date_firstjob">Date Premier Emploi :</label>
+                    <input type="date" id="date_firstjob" name="date_firstjob">
+                </div>
+            </div>
+
+            <button type="submit">Prédire</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2>Résultat</h2>
+            <p id="predictionValue"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('choix').addEventListener('change', function() {
+            const choix = this.value;
+            document.getElementById('moyenne-form').style.display = 'none';
+            document.getElementById('embauche-form').style.display = 'none';
+            document.getElementById('salaire-form').style.display = 'none';
+
+            if (choix === 'moyenne') {
+                document.getElementById('moyenne-form').style.display = 'block';
+            } else if (choix === 'embauche') {
+                document.getElementById('embauche-form').style.display = 'block';
+            } else if (choix === 'salaire') {
+                document.getElementById('salaire-form').style.display = 'block';
+            }
+        });
+
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const choix = document.getElementById('choix').value;
+
+            let data = { choix: choix };
+
+            if (choix === 'moyenne') {
+                data.score_final = document.getElementById('score_final').value;
+                data.moy_bac_et = document.getElementById('moy_bac_et').value;
+                data.Mention = document.getElementById('Mention').value;
+                data.nature_bac = document.getElementById('nature_bac').value;
+            } else if (choix === 'embauche') {
+                data.days_since_diplome = document.getElementById('days_since_diplome').value;
+                data.diplome = document.getElementById('diplome').value;
+                data.offre = document.getElementById('offre').value;
+                data.entreprise_location = document.getElementById('entreprise_location').value;
+                data.universite = document.getElementById('universite').value;
+            } else if (choix === 'salaire') {
+                data.universite = document.getElementById('universite_salaire').value;
+                data.diplome_part1 = document.getElementById('diplome_part1').value;
+                data.diplome_part2 = document.getElementById('diplome_part2').value;
+                data.diplome_part3 = document.getElementById('diplome_part3').value;
+                data.offre = document.getElementById('offre_salaire').value;
+                data.entreprise_location = document.getElementById('entreprise_location_salaire').value;
+                data.dateDiplome = document.getElementById('dateDiplome').value;
+                data.date_firstjob = document.getElementById('date_firstjob').value;
+            }
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('predictionValue').textContent = "Erreur : " + result.error;
+                } else if (result.moyenne_predite) {
+                    document.getElementById('predictionValue').textContent = "Moyenne Prédite : " + result.moyenne_predite + " / 20";
+                } else if (result.prediction_embauche) {
+                    document.getElementById('predictionValue').textContent = "Résultat Embauche : " + result.prediction_embauche;
+                } else if (result.prediction_salaire) {
+                    document.getElementById('predictionValue').textContent = "Salaire Estimé : " + result.prediction_salaire + " TND";
+                }
+                document.getElementById('result').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert("Une erreur s'est produite");
+            });
+        });
+    </script>
+</body>
+</html>

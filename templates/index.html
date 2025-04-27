@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application de Prédiction - 6 Modèles ML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 20px;
+        }
+        nav {
+            background: #4CAF50;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background: #e7f3e7;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #b6dfb6;
+            border-radius: 5px;
+            color: #2f6627;
+        }
+        .error {
+            background: #f8d7da;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧠 Application de Prédiction - 5 Modèles Machine Learning</h1>
+
+    <!-- Barre de Navigation -->
+    <nav>
+        <a href="#rf">Random Forest (Embauche)</a>
+        <a href="#regression_salaire">Régression Salaire</a>
+        <a href="#moyenne_future">Moyenne Future</a>
+        <a href="#delai_emploi">Délai d'Emploi</a>
+        <a href="#admission">Admission</a>
+        <a href="#reg6">prediction nombre d'étudiants</a>
+        
+    </nav>
+
+    <!-- FORMULAIRE 1 : Random Forest Embauche -->
+    <div id="rf" class="form-container">
+        <h2>1. Classification Embauche (Random Forest)</h2>
+        <form action="/" method="POST">
+            <input type="hidden" name="form_type" value="classification_rf">
+            <label>Diplôme:</label>
+            <input type="text" name="feature1" required>
+
+            <label>Offre :</label>
+            <input type="text" name="feature2" required>
+
+            <label>Localisation :</label>
+            <input type="text" name="feature3" required>
+
+            <label>Université :</label>
+            <input type="text" name="feature4" required>
+
+            <button type="submit">Prédire Classe</button>
+        </form>
+
+        {% if prediction_rf %}
+            <div class="result">
+                Résultat de la classification : <strong>{{ prediction_rf }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 2 : Régression Salaire -->
+    <div id="regression_salaire" class="form-container">
+        <h2>2. Régression : Prédire Salaire Estimé</h2>
+        <form action="/" method="POST">
+            <input type="hidden" name="form_type" value="regression_salaire">
+            <label>Université :</label>
+            <input type="text" name="universite" required>
+
+            <label>Diplôme Partie 1 :</label>
+            <input type="text" name="diplome_part1" required>
+
+            <label>Diplôme Partie 2 :</label>
+            <input type="text" name="diplome_part2">
+
+            <label>Diplôme Partie 3 :</label>
+            <input type="text" name="diplome_part3">
+
+            <label>Offre :</label>
+            <input type="text" name="offre" required>
+
+            <label>Lieu de l'Entreprise :</label>
+            <input type="text" name="entreprise_location">
+
+            <label>Date du Diplôme :</label>
+            <input type="date" name="dateDiplome" required>
+
+            <label>Date du Premier Emploi :</label>
+            <input type="date" name="date_firstjob" required>
+
+            <button type="submit">Prédire Salaire</button>
+        </form>
+
+        {% if prediction_regression %}
+            <div class="result">
+                Résultat de la régression salaire : <strong>{{ prediction_regression }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 3 : Moyenne Future -->
+    <div id="moyenne_future" class="form-container">
+        <h2>3. Régression : Prédire Moyenne Future</h2>
+        <form action="/" method="POST">
+            <input type="hidden" name="form_type" value="moyenne_future">
+            <label>Score Final :</label>
+            <input type="number" step="0.01" name="score_final" required>
+
+            <label>Moyenne Bac Étudiant :</label>
+            <input type="number" step="0.01" name="moy_bac_et" required>
+
+            <label>Nature du Bac :</label>
+            <input type="text" name="nature_bac" required>
+
+            <label>Mention :</label>
+            <select name="Mention" required>
+                <option value="مقبول">مقبول</option>
+                <option value="جيد">جيد</option>
+                <option value="جيد جدا">جيد جدا</option>
+                <option value="ممتاز">ممتاز</option>
+            </select>
+
+            <button type="submit">Prédire Moyenne</button>
+        </form>
+
+        {% if prediction_moyenne %}
+            <div class="result">
+                Résultat de la prédiction moyenne : <strong>{{ prediction_moyenne }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 4 : Délai Emploi -->
+    <div id="delai_emploi" class="form-container">
+        <h2>4. Régression : Prédire Délai d'Emploi après Diplôme</h2>
+        <form action="/" method="POST">
+            <input type="hidden" name="form_type" value="jours_attente">
+            <label>Nom de l'Entreprise :</label>
+            <input type="text" name="entreprise_name" required>
+
+            <label>Nom de l'Offre :</label>
+            <input type="text" name="offre_name" required>
+
+            <label>Année du Diplôme :</label>
+            <input type="number" name="annee_diplome" required>
+
+            <label>Mois du Diplôme :</label>
+            <input type="number" min="1" max="12" name="mois_diplome" required>
+
+            <button type="submit">Prédire Délai</button>
+        </form>
+
+        {% if prediction_jours_attente %}
+            <div class="result">
+                Nombre de jours estimé : <strong>{{ prediction_jours_attente }} jours</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 5 : Admission -->
+    <div id="admission" class="form-container">
+        <h2>5. Classification : Admission (Accepté / Refusé)</h2>
+        <form action="/" method="POST">
+            <input type="hidden" name="form_type" value="classification_admission">
+            <label>Score Final :</label>
+            <input type="number" step="0.01" name="score_final" required>
+
+            <label>Moyenne Bac Étudiant :</label>
+            <input type="number" step="0.01" name="moy_bac_et" required>
+
+            <label>Nature du Bac :</label>
+            <input type="text" name="nature_bac">
+
+            <label>Diplôme :</label>
+            <input type="text" name="diplome">
+
+            <label>Spécialité :</label>
+            <input type="text" name="specialite">
+
+            <label>Gouvernorat :</label>
+            <input type="text" name="gouvernorat">
+
+            <button type="submit">Prédire Admission</button>
+        </form>
+     
+
+        {% if prediction_classification_admission %}
+            <div class="result">
+                Résultat de l'admission : <strong>{{ prediction_classification_admission }}</strong>
+            </div>
+        {% endif %}
+    </div>
+    <div id="reg6" class="form-container">
+        <h2>6. Regression: prediction nombre d'étudiants</h2>
+            <!-- Formulaire pour le 6ème modèle (exemple ici avec une régression supplémentaire) -->
+        <form action="/" method="POST">
+        
+        <input type="number" name="annee" placeholder="Année" required>
+        
+        <input type="hidden" name="form_type" value="regression_six">
+            <button type="submit">Prédire nombre d'étudiants</button>
+        </form>
+
+         {% if prediction_six %}
+            <div class="mt-3">
+                <h3>Résultat de la Régression 6 :</h3>
+                <p>{{ prediction_six }}</p>
+            </div>
+        {% endif %}
+        </div>
+    {% if error_message %}
+        <div class="error">
+            Erreur : {{ error_message }}
+        </div>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application de Prédiction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background: #e7f3e7;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #b6dfb6;
+            border-radius: 5px;
+            color: #2f6627;
+        }
+        .error {
+            background: #f8d7da;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧠 Application de Prédiction</h1>
+
+    <!-- FORMULAIRE 1: Classification Random Forest -->
+    <div class="form-container">
+        <h2>1. Prédire la Classe d'Embauche</h2>
+        <form method="post">
+            <input type="hidden" name="form_type" value="classification">
+            
+            <!-- Exemple de champs pour classification -->
+            <label for="feature1">Feature 1</label>
+            <input type="text" name="feature1" required>
+
+            <label for="feature2">Feature 2</label>
+            <input type="text" name="feature2" required>
+
+            <label for="feature3">Feature 3</label>
+            <input type="text" name="feature3" required>
+            
+             <label for="feature4">Feature 4</label>
+            <input type="text" name="feature4" required>
+            <!-- Ajouter d'autres features selon ton modèle -->
+
+            <button type="submit">Prédire Classe</button>
+        </form>
+
+        {% if prediction_rf %}
+            <div class="result">
+                Résultat de la classification : <strong>{{ prediction_rf }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 2: Régression Salaire -->
+    <div class="form-container">
+        <h2>2. Prédire le Salaire Estimé</h2>
+        <form method="post">
+            <input type="hidden" name="form_type" value="regression">
+
+            <label for="universite">Université</label>
+            <input type="text" name="universite" required>
+
+            <label for="diplome_part1">Diplôme Part 1</label>
+            <input type="text" name="diplome_part1" required>
+
+            <label for="diplome_part2">Diplôme Part 2</label>
+            <input type="text" name="diplome_part2">
+
+            <label for="diplome_part3">Diplôme Part 3</label>
+            <input type="text" name="diplome_part3">
+
+            <label for="offre">Offre</label>
+            <input type="text" name="offre" required>
+
+            <label for="entreprise_location">Lieu Entreprise</label>
+            <input type="text" name="entreprise_location">
+
+            <label for="dateDiplome">Date Diplôme</label>
+            <input type="date" name="dateDiplome" required>
+
+            <label for="date_firstjob">Date Premier Emploi</label>
+            <input type="date" name="date_firstjob" required>
+
+            <button type="submit">Prédire Salaire</button>
+        </form>
+
+        {% if prediction_regression %}
+            <div class="result">
+                Résultat de la régression salaire : <strong>{{ prediction_regression }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- FORMULAIRE 3: Prédiction Moyenne Future -->
+    <div class="form-container">
+        <h2>3. Prédire Moyenne Future</h2>
+        <form method="post">
+            <input type="hidden" name="form_type" value="moyenne_future">
+
+            <label for="score_final">Score Final</label>
+            <input type="number" name="score_final" step="0.01" required>
+
+            <label for="moy_bac_et">Moyenne Bac Étudiant</label>
+            <input type="number" name="moy_bac_et" step="0.01" required>
+
+            <label for="nature_bac">Nature du Bac</label>
+            <input type="text" name="nature_bac" required>
+
+            <label for="Mention">Mention</label>
+            <select name="Mention" required>
+                <option value="مقبول">مقبول</option>
+                <option value="جيد">جيد</option>
+                <option value="جيد جدا">جيد جدا</option>
+                <option value="ممتاز">ممتاز</option>
+            </select>
+
+            <button type="submit">Prédire Moyenne</button>
+        </form>
+
+        {% if prediction_moyenne %}
+            <div class="result">
+                Résultat de la prédiction moyenne : <strong>{{ prediction_moyenne }}</strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Affichage des erreurs -->
+    {% if error_message %}
+        <div class="error">
+            Erreur : {{ error_message }}
+        </div>
+    {% endif %}
+
+</body>
+</html>
